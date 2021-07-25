@@ -34,7 +34,7 @@ S += $(R)
 
 # \ all
 .PHONY: all
-all: bin/metaL lib/metaL.ml
+all: bin/$(MODULE) lib/$(MODULE).ml
 	$^
 
 .PHONY: repl
@@ -49,8 +49,8 @@ tmp/format: $(R)
 	cargo fmt
 	touch $@
 
-bin/metaL: $(R) Makefile
-	cargo build && cp target/debug/metal $@
+bin/$(MODULE): $(R) Makefile
+	cargo build && cp target/debug/persistos $@
 	$(MAKE) format
 # / all
 
@@ -70,6 +70,7 @@ install: $(OS)_install doc
 	$(MAKE) update
 update: $(OS)_update
 	$(RUSTUP) update
+	$(CARGO)  update
 
 .PHONY: Linux_install Linux_update
 Linux_install Linux_update:
@@ -82,7 +83,7 @@ $(CARGO):
 # \ merge
 MERGE  = README.md LICENSE Makefile .gitignore apt.txt apt.dev .vscode $(S)
 MERGE += bin doc tmp
-MERGE += static templates
+MERGE += lib src
 
 .PHONY: zip
 zip:
